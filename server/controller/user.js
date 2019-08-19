@@ -90,7 +90,7 @@ const userController = {
         },
       });
     }
-    // Otherwise bring an error
+    // Otherwise bring an error 
     return res.status(400).send({
       status: res.statusCode,
       message: 'something went wrong',
