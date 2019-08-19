@@ -1,7 +1,6 @@
 import express from 'express';
 import config from 'config';
 import userRouter from './route/user';
-import mentorRouter from './route/mentor';
 
 require('dotenv').config();
 
