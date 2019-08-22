@@ -2,6 +2,7 @@ import {
   compare,
 } from 'bcryptjs';
 import UserModel from '../model/user';
+import MentorModel from '../model/mentor';
 import generatePassword from '../helpers/generatePassword';
 import generateToken from '../helpers/utils';
 import validator from '../helpers/validation';
@@ -9,6 +10,7 @@ import validator from '../helpers/validation';
 const _ = require('lodash');
 
 const Data = new UserModel();
+const MentorData = new MentorModel();
 
 const userController = {
   userSignup: async (req, res) => {
@@ -90,12 +92,68 @@ const userController = {
         },
       });
     }
-    // Otherwise bring an error 
+    // Otherwise bring an error
     return res.status(400).send({
       status: res.statusCode,
       message: 'something went wrong',
       data: results.error.details[0].message,
     });
   },
+  // Change user to Mentor
+  changeToMentor: (req, res) => {
+    const users = [{
+      id: 1,
+      first_name: 'Stuart',
+      last_name: 'Dambi',
+      email: 'stuartdambi@gmail.com',
+      password: 'Mbulambago1.',
+      address: 'Kampala',
+      bio: 'Male',
+      occupation: 'Programmer',
+      expertise: 'Javascript',
+      isAdmin: true,
+    },
+    {
+      id: 2,
+      first_name: 'Musoke',
+      last_name: 'Dan',
+      email: 'danmusoke@gmail.com',
+      password: 'kasibante7389.',
+      address: 'Mukono',
+      bio: 'Male',
+      occupation: 'Farmer',
+      expertise: 'Piggery',
+      isAdmin: false,
+    },
+    ];
+    const user = users.find(c => c.id === parseInt(req.params.id, 10));
+    if (!user) {
+      return res.status(404).send({
+        status: res.statusCode,
+        message: 'User not found',
+      });
+    }
+    // Delete id element from User
+    delete user.id;
+    // Add mentorId element to User Object
+    user.mentorId = 1;
+    Object.defineProperty(user, 'mentorId', { value: 1 });
+
+    // Add the created mentor to the DB
+    MentorData.addMentor(user);
+    MentorData.mentorId = MentorData.updateMentors() + 1;
+    return res.status(200).send({
+      status: res.statusCode,
+      data: {
+        message: 'User Account Changed to mentor',
+        user,
+      },
+    });
+  },
+  // View all mentors
+  viewMentors: (req, res) => res.status(200).send({
+    status: res.statusCode,
+    data: MentorData.mentors,
+  }),
 };
 module.exports = userController;
