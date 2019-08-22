@@ -17,4 +17,7 @@ router.post('/auth/signin', userController.userSignin);
 // Change user to Mentor
 router.put('/users/:id', urlencodedParser, auth, userController.changeToMentor);
 
+// Display all mentors
+router.get('/mentors', userController.viewMentors);
+
 module.exports = router;

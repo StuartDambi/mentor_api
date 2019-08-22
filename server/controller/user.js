@@ -101,7 +101,6 @@ const userController = {
   },
   // Change user to Mentor
   changeToMentor: (req, res) => {
-    console.log('Loggingig Request data:    ');
     const users = [{
       id: 1,
       first_name: 'Stuart',
@@ -142,6 +141,7 @@ const userController = {
 
     // Add the created mentor to the DB
     MentorData.addMentor(user);
+    MentorData.mentorId = MentorData.updateMentors() + 1;
     return res.status(200).send({
       status: res.statusCode,
       data: {
@@ -150,5 +150,10 @@ const userController = {
       },
     });
   },
+  // View all mentors
+  viewMentors: (req, res) => res.status(200).send({
+    status: res.statusCode,
+    data: MentorData.mentors,
+  }),
 };
 module.exports = userController;
